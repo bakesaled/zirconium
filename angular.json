@@ -1,7 +1,63 @@
 {
   "version": 1,
-  "projects": {},
+  "projects": {
+    "node-zirconium-engine": {
+      "root": "apps/node-zirconium-engine",
+      "sourceRoot": "apps/node-zirconium-engine/src",
+      "projectType": "application",
+      "prefix": "node-zirconium-engine",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/node-zirconium-engine",
+            "main": "apps/node-zirconium-engine/src/main.ts",
+            "tsConfig": "apps/node-zirconium-engine/tsconfig.app.json",
+            "assets": ["apps/node-zirconium-engine/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/node-zirconium-engine/src/environments/environment.ts",
+                  "with": "apps/node-zirconium-engine/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "node-zirconium-engine:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/node-zirconium-engine/tsconfig.app.json",
+              "apps/node-zirconium-engine/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/node-zirconium-engine/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/node-zirconium-engine/jest.config.js",
+            "tsConfig": "apps/node-zirconium-engine/tsconfig.spec.json"
+          }
+        }
+      }
+    }
+  },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  }
+    "defaultCollection": "@nrwl/node"
+  },
+  "defaultProject": "node-zirconium-engine"
 }
