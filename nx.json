@@ -13,6 +13,12 @@
   "projects": {
     "node-zirconium-engine": {
       "tags": []
+    },
+    "web-zirconium-app-e2e": {
+      "tags": []
+    },
+    "web-zirconium-app": {
+      "tags": []
     }
   }
 }
