@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import Phaser from 'phaser';
 import { GamePlayScene } from './scenes/game-play.scene';
+import { GameOverScene } from './scenes/game-over.scene';
 
 @Component({
   selector: 'zirconium-game',
@@ -16,7 +17,7 @@ export class GameComponent implements OnInit {
       type: Phaser.AUTO,
       height: 640,
       width: 640,
-      scene: [GamePlayScene],
+      scene: [GamePlayScene, GameOverScene],
       parent: 'gameContainer',
       physics: {
         default: 'arcade',

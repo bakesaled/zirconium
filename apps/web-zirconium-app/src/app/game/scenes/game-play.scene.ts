@@ -69,7 +69,7 @@ export class GamePlayScene extends Phaser.Scene {
 
   private spawnCars(start) {
     this.time.addEvent({
-      delay: 2000,
+      delay: 1000,
       loop: true,
       callback: () => {
         const car = new CarEntity(this, start.x, start.y);
@@ -77,7 +77,7 @@ export class GamePlayScene extends Phaser.Scene {
         const lastCar: CarEntity = this.cars.getLast(true);
         this.cars.add(car);
         if (car.overlaps(lastCar)) {
-          alert('Game Over');
+          this.endGame();
         }
         car.startMoving();
       }
@@ -96,5 +96,12 @@ export class GamePlayScene extends Phaser.Scene {
         }
       }
     });
+  }
+
+  private endGame() {
+    this.scene.pause('game-play');
+    const scene = this.game.scene.getScene('game-over');
+    scene.scene.setActive(true);
+    this.game.scene.start('game-over');
   }
 }
