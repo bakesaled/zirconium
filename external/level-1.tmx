@@ -17,13 +17,13 @@
   </data>
  </layer>
  <objectgroup id="4" name="Intersections">
-  <object id="5" name="intersection-0" x="276.333" y="276.667" width="88" height="86.5"/>
+  <object id="5" name="intersection-0" x="266.333" y="266.667" width="108" height="107.5"/>
  </objectgroup>
  <objectgroup id="5" name="Lights">
-  <object id="6" name="intersection-0-west" x="286" y="335"/>
-  <object id="7" name="intersection-0-north" x="305.5" y="287"/>
-  <object id="8" name="intersection-0-east" x="353.5" y="305.5"/>
-  <object id="9" name="intersection-0-south" x="335" y="353.5"/>
+  <object id="6" name="intersection-0-west" x="276.5" y="335.5"/>
+  <object id="7" name="intersection-0-north" x="305" y="276.5"/>
+  <object id="8" name="intersection-0-east" x="364" y="305.5"/>
+  <object id="9" name="intersection-0-south" x="335" y="363.5"/>
  </objectgroup>
  <objectgroup id="3" name="Starts">
   <object id="1" name="west-0" x="12.6667" y="335.333"/>

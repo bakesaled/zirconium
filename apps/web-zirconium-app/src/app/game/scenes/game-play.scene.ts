@@ -1,11 +1,9 @@
 import { CarEntity } from '../entities/car.entitiy';
-import {
-  TrafficLightEntity,
-  TrafficLightPhase
-} from '../entities/traffic-light.entity';
+import { IntersectionEntity } from '../entities/intersection.entity';
 
 export class GamePlayScene extends Phaser.Scene {
   cars: Phaser.Physics.Arcade.Group;
+  lightsLayer: Phaser.Types.Tilemaps.TiledObject[];
   tileset;
   constructor() {
     super({
@@ -16,7 +14,19 @@ export class GamePlayScene extends Phaser.Scene {
     this.load.image('tiles', 'assets/tileset.png');
     this.load.tilemapTiledJSON('map', 'assets/level-1.json');
     this.load.image('car', 'assets/car-red-east.png');
-    this.load.spritesheet('light-east', 'assets/light-east.png', {
+    this.load.spritesheet('light-west', 'assets/light-east.png', {
+      frameWidth: 24,
+      frameHeight: 24
+    });
+    this.load.spritesheet('light-east', 'assets/light-west.png', {
+      frameWidth: 24,
+      frameHeight: 24
+    });
+    this.load.spritesheet('light-south', 'assets/light-north.png', {
+      frameWidth: 24,
+      frameHeight: 24
+    });
+    this.load.spritesheet('light-north', 'assets/light-south.png', {
       frameWidth: 24,
       frameHeight: 24
     });
@@ -27,21 +37,22 @@ export class GamePlayScene extends Phaser.Scene {
     const background = map.createStaticLayer('Background', this.tileset, 0, 0);
     const trees = map.createStaticLayer('Trees', this.tileset, 0, 0);
     const startsLayer = map.getObjectLayer('Starts')['objects'];
-    const lightsLayer = map.getObjectLayer('Lights')['objects'];
+    this.lightsLayer = map.getObjectLayer('Lights')['objects'];
+    const intersectionsLayer = map.getObjectLayer('Intersections')['objects'];
     // this.square = this.add.rectangle(400, 400, 100, 100, 0xffffff) as any;
     // this.physics.add.existing(this.square);
     // const light = new TrafficLightEntity(this, 284, 336);
-    const lightLocation = lightsLayer.find(
-      o => o.name === 'intersection-0-west'
-    );
-    const light = new TrafficLightEntity(
-      this,
-      lightLocation.x,
-      lightLocation.y
-    );
-    this.changeLights(light);
-
     this.cars = this.physics.add.group();
+
+    const intersection = new IntersectionEntity(
+      this,
+      intersectionsLayer[0].name,
+      intersectionsLayer[0].x + intersectionsLayer[0].width / 2,
+      intersectionsLayer[0].y + intersectionsLayer[0].height / 2,
+      intersectionsLayer[0].width,
+      intersectionsLayer[0].height
+    );
+
     this.physics.add.collider(this.cars, this.cars);
     const start = startsLayer.find(o => o.name === 'west-0');
     this.spawnCars(start);
@@ -80,20 +91,6 @@ export class GamePlayScene extends Phaser.Scene {
           this.endGame();
         }
         car.startMoving();
-      }
-    });
-  }
-
-  private changeLights(light: TrafficLightEntity) {
-    this.time.addEvent({
-      delay: 10000,
-      loop: true,
-      callback: () => {
-        if (light.phase === TrafficLightPhase.GO) {
-          light.startStopPhase();
-        } else {
-          light.startGoPhase();
-        }
       }
     });
   }

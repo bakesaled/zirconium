@@ -23,7 +23,7 @@ export class GameComponent implements OnInit {
         default: 'arcade',
         arcade: {
           // gravity: { y: 100 }
-          // debug: true
+          debug: true
         }
       }
     };
