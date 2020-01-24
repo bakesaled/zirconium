@@ -13,12 +13,17 @@ export enum CarDirection {
 export class CarEntity extends Phaser.Physics.Arcade.Sprite {
   static carSize = 32;
   carState: CarState;
-  direction: CarDirection;
 
   movingSpeed: number;
 
-  constructor(public scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, 'car');
+  constructor(
+    public scene: Phaser.Scene,
+    public name: string,
+    private direction: CarDirection,
+    x: number,
+    y: number
+  ) {
+    super(scene, x, y, name);
     this.movingSpeed = 0;
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
@@ -27,8 +32,7 @@ export class CarEntity extends Phaser.Physics.Arcade.Sprite {
   startMoving() {
     this.carState = CarState.MOVING;
     this.movingSpeed = 100;
-    this.setVelocityX(this.movingSpeed).setBounceX(0);
-    // this.setVelocityY(this.movingSpeed).setBounceX(0);
+    this.setVelocityByDirection(this.movingSpeed);
   }
 
   startIdle() {
@@ -37,16 +41,37 @@ export class CarEntity extends Phaser.Physics.Arcade.Sprite {
     this.setVelocityX(this.movingSpeed);
   }
 
-  overlaps(targetCar: CarEntity): boolean {
-    if (!targetCar) {
+  overlaps(otherCars: Phaser.Physics.Arcade.Group): boolean {
+    if (!otherCars || !otherCars.getChildren().length) {
       return false;
     }
-    const rect = targetCar.getBounds();
-    return (
-      this.x + CarEntity.carSize >= rect.left &&
-      this.x + CarEntity.carSize <= rect.right &&
-      this.y >= rect.top &&
-      this.y <= rect.bottom
-    );
+    const overlap = otherCars.getChildren().find((car: CarEntity) => {
+      const rect = car.getBounds();
+      return (
+        this.x >= rect.left &&
+        this.x <= rect.right &&
+        this.y >= rect.top &&
+        this.y <= rect.bottom
+      );
+    });
+
+    return overlap !== undefined;
+  }
+
+  private setVelocityByDirection(speed: number) {
+    switch (this.direction) {
+      case CarDirection.EAST:
+        this.setVelocityX(-speed).setBounceX(0);
+        break;
+      case CarDirection.NORTH:
+        this.setVelocityY(speed).setBounceY(0);
+        break;
+      case CarDirection.WEST:
+        this.setVelocityX(speed).setBounceX(0);
+        break;
+      case CarDirection.SOUTH:
+        this.setVelocityY(-speed).setBounceY(0);
+        break;
+    }
   }
 }

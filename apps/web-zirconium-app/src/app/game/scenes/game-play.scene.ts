@@ -1,8 +1,9 @@
-import { CarEntity } from '../entities/car.entitiy';
+import { CarDirection, CarEntity } from '../entities/car.entitiy';
 import { IntersectionEntity } from '../entities/intersection.entity';
 
 export class GamePlayScene extends Phaser.Scene {
   cars: Phaser.Physics.Arcade.Group;
+  startsLayer: Phaser.Types.Tilemaps.TiledObject[];
   lightsLayer: Phaser.Types.Tilemaps.TiledObject[];
   tileset;
   constructor() {
@@ -13,7 +14,10 @@ export class GamePlayScene extends Phaser.Scene {
   preload() {
     this.load.image('tiles', 'assets/tileset.png');
     this.load.tilemapTiledJSON('map', 'assets/level-1.json');
-    this.load.image('car', 'assets/car-red-east.png');
+    this.load.image('car-red-east', 'assets/car-red-east.png');
+    this.load.image('car-red-west', 'assets/car-red-west.png');
+    this.load.image('car-red-north', 'assets/car-red-north.png');
+    this.load.image('car-red-south', 'assets/car-red-south.png');
     this.load.spritesheet('light-west', 'assets/light-east.png', {
       frameWidth: 24,
       frameHeight: 24
@@ -36,7 +40,7 @@ export class GamePlayScene extends Phaser.Scene {
     this.tileset = map.addTilesetImage('tileset', 'tiles');
     const background = map.createStaticLayer('Background', this.tileset, 0, 0);
     const trees = map.createStaticLayer('Trees', this.tileset, 0, 0);
-    const startsLayer = map.getObjectLayer('Starts')['objects'];
+    this.startsLayer = map.getObjectLayer('Starts')['objects'];
     this.lightsLayer = map.getObjectLayer('Lights')['objects'];
     const intersectionsLayer = map.getObjectLayer('Intersections')['objects'];
     // this.square = this.add.rectangle(400, 400, 100, 100, 0xffffff) as any;
@@ -53,9 +57,7 @@ export class GamePlayScene extends Phaser.Scene {
       intersectionsLayer[0].height
     );
 
-    this.physics.add.collider(this.cars, this.cars);
-    const start = startsLayer.find(o => o.name === 'west-0');
-    this.spawnCars(start);
+    this.initCars();
   }
   update() {
     const cursorKeys = this.input.keyboard.createCursorKeys();
@@ -78,18 +80,36 @@ export class GamePlayScene extends Phaser.Scene {
     // this.car.body.setVelocityX(100);
   }
 
+  private initCars() {
+    this.physics.add.collider(this.cars, this.cars);
+    this.startsLayer.forEach(start => {
+      this.spawnCars(start);
+    });
+  }
+
   private spawnCars(start) {
     this.time.addEvent({
       delay: 1000,
       loop: true,
       callback: () => {
-        const car = new CarEntity(this, start.x, start.y);
+        const direction: CarDirection =
+          CarDirection[
+            start.name.split('-')[0].toUpperCase() as keyof typeof CarDirection
+          ];
+        const car = new CarEntity(
+          this,
+          `car-red-${CarDirection[direction].toLowerCase()}`,
+          direction,
+          start.x,
+          start.y
+        );
 
-        const lastCar: CarEntity = this.cars.getLast(true);
-        this.cars.add(car);
-        if (car.overlaps(lastCar)) {
+        // const lastCar: CarEntity = this.cars.getLast(true);
+
+        if (car.overlaps(this.cars)) {
           this.endGame();
         }
+        this.cars.add(car);
         car.startMoving();
       }
     });
