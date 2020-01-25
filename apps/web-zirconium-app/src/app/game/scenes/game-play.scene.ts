@@ -3,13 +3,17 @@ import { IntersectionEntity } from '../entities/intersection.entity';
 
 export class GamePlayScene extends Phaser.Scene {
   cars: Phaser.Physics.Arcade.Group;
+  intersections: Phaser.Physics.Arcade.StaticGroup;
   startsLayer: Phaser.Types.Tilemaps.TiledObject[];
   lightsLayer: Phaser.Types.Tilemaps.TiledObject[];
   tileset;
+  score;
+  scoreText;
   constructor() {
     super({
       key: 'game-play'
     });
+    this.score = 0;
   }
   preload() {
     this.load.image('tiles', 'assets/tileset.png');
@@ -36,6 +40,9 @@ export class GamePlayScene extends Phaser.Scene {
     });
   }
   create() {
+    this.cars = this.physics.add.group();
+    this.intersections = this.physics.add.staticGroup();
+
     const map = this.make.tilemap({ key: 'map' });
     this.tileset = map.addTilesetImage('tileset', 'tiles');
     const background = map.createStaticLayer('Background', this.tileset, 0, 0);
@@ -46,7 +53,6 @@ export class GamePlayScene extends Phaser.Scene {
     // this.square = this.add.rectangle(400, 400, 100, 100, 0xffffff) as any;
     // this.physics.add.existing(this.square);
     // const light = new TrafficLightEntity(this, 284, 336);
-    this.cars = this.physics.add.group();
 
     const intersection = new IntersectionEntity(
       this,
@@ -56,8 +62,14 @@ export class GamePlayScene extends Phaser.Scene {
       intersectionsLayer[0].width,
       intersectionsLayer[0].height
     );
+    this.intersections.add(intersection);
 
     this.initCars();
+
+    this.scoreText = this.add.text(16, 16, 'score: 0', {
+      fontSize: '16px',
+      fill: '#fff'
+    });
   }
   update() {
     const cursorKeys = this.input.keyboard.createCursorKeys();
@@ -78,6 +90,11 @@ export class GamePlayScene extends Phaser.Scene {
     //   this.square.body.setVelocityX(0);
     // }
     // this.car.body.setVelocityX(100);
+  }
+
+  changeScore(delta: number) {
+    this.score += delta;
+    this.scoreText.setText('score: ' + this.score);
   }
 
   private initCars() {

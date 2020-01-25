@@ -8,7 +8,7 @@ export enum IntersectionPhase {
 }
 
 export class IntersectionEntity extends Phaser.GameObjects.Zone {
-  lights: TrafficLightEntity[];
+  lights: Phaser.Physics.Arcade.StaticGroup;
   phase: IntersectionPhase;
 
   constructor(
@@ -29,7 +29,7 @@ export class IntersectionEntity extends Phaser.GameObjects.Zone {
     const lightLocations = this.scene.lightsLayer.filter(o =>
       o.name.startsWith(this.name)
     );
-    this.lights = [];
+    this.lights = this.scene.physics.add.staticGroup();
     lightLocations.forEach(loc => {
       let initialLightPhase = TrafficLightPhase.STOP;
       switch (loc.name.split('-')[2]) {
@@ -44,11 +44,8 @@ export class IntersectionEntity extends Phaser.GameObjects.Zone {
         loc.y,
         initialLightPhase
       );
-      this.lights.push(light);
+      this.lights.add(light);
     });
-
-    // this.changeLights(light);
-    // this.initLightCycle();
   }
 
   onPointerDown() {
@@ -56,7 +53,7 @@ export class IntersectionEntity extends Phaser.GameObjects.Zone {
   }
 
   private advanceLightCycle() {
-    this.lights.forEach(light => {
+    this.lights.getChildren().forEach((light: TrafficLightEntity) => {
       if (light.phase === TrafficLightPhase.STOP) {
         light.startGoPhase();
       } else if (light.phase === TrafficLightPhase.GO) {
