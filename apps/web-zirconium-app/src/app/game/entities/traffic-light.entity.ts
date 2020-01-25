@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { GamePlayScene } from '../scenes/game-play.scene';
-import { CarEntity } from './car.entitiy';
+import { CarDirection, CarEntity } from './car.entitiy';
 
 export enum TrafficLightPhase {
   STOP,
@@ -14,6 +14,9 @@ export class TrafficLightEntity extends Phaser.Physics.Arcade.Sprite {
   collider: Phaser.Physics.Arcade.Collider;
   overlap: Phaser.Physics.Arcade.Collider;
   phase: TrafficLightPhase;
+  stoppedCar: CarEntity;
+  lastCarThrough: CarEntity;
+
   constructor(
     public scene: GamePlayScene,
     public name: string,
@@ -60,7 +63,6 @@ export class TrafficLightEntity extends Phaser.Physics.Arcade.Sprite {
   }
 
   setGoPhase() {
-    this.enableBody(false, this.x, this.y, true, true);
     this.phase = TrafficLightPhase.GO;
     this.setFrame(1);
     if (this.collider) {
@@ -70,20 +72,44 @@ export class TrafficLightEntity extends Phaser.Physics.Arcade.Sprite {
     this.overlap = this.scene.physics.add.overlap(
       this.scene.cars,
       this,
-      (light: TrafficLightEntity) => {
-        this.onOverlap(light);
+      (light: TrafficLightEntity, car: CarEntity) => {
+        this.onOverlap(light, car);
       }
     );
+
+    if (this.stoppedCar) {
+      this.stoppedCar.startMoving();
+      //   const carsBehind = this.scene.cars
+      //     .getChildren()
+      //     .filter((c: CarEntity) => {
+      //       return c.start === this.stoppedCar.start;
+      //     });
+      //   carsBehind.forEach((car: CarEntity) => {
+      //     this.scene.time.addEvent({
+      //       loop: false,
+      //       delay: 300,
+      //       callback: () => {
+      //         // console.log('move');
+      //         car.startMoving();
+      //       }
+      //     });
+      //   });
+    }
   }
 
   setStopPhase() {
-    this.enableBody(false, this.x, this.y, true, true);
     this.phase = TrafficLightPhase.STOP;
     this.setFrame(2);
     if (this.overlap) {
       this.overlap.destroy();
     }
-    this.collider = this.scene.physics.add.collider(this.scene.cars, this);
+    this.collider = this.scene.physics.add.collider(
+      this.scene.cars,
+      this,
+      (light: TrafficLightEntity, car: CarEntity) => {
+        this.onCollide(light, car);
+      }
+    );
   }
 
   setCautionPhase() {
@@ -91,16 +117,31 @@ export class TrafficLightEntity extends Phaser.Physics.Arcade.Sprite {
     this.setFrame(0);
   }
 
-  private onOverlap(light: TrafficLightEntity) {
+  private onOverlap(light: TrafficLightEntity, car: CarEntity) {
     // only want to score points when overlap ends.
-    const touching = !light.body.touching.none;
-    const wasTouching = !light.body.wasTouching.none;
-    if (!touching && wasTouching) {
-      light.disableBody(false, false);
+    const touching = !car.body.touching.none;
+    // const wasTouching = !car.body.wasTouching.none;
+
+    if (
+      this.lastCarThrough !== car &&
+      (!this.lastCarThrough ||
+        ((this.lastCarThrough.direction === CarDirection.EAST &&
+          this.lastCarThrough.body.x + 32 <= car.body.x) ||
+          (this.lastCarThrough.direction === CarDirection.WEST &&
+            this.lastCarThrough.body.x - 32 >= car.body.x) ||
+          (this.lastCarThrough.direction === CarDirection.NORTH &&
+            this.lastCarThrough.body.y - 32 >= car.body.y) ||
+          (this.lastCarThrough.direction === CarDirection.SOUTH &&
+            this.lastCarThrough.body.y + 32 <= car.body.y)))
+    ) {
+      if (touching) {
+        this.lastCarThrough = car;
+        this.scene.changeScore(100);
+      }
     }
-    if (touching && !wasTouching) {
-      this.scene.changeScore(100);
-      light.enableBody(false, light.x, light.y, true, true);
-    }
+  }
+
+  private onCollide(light: TrafficLightEntity, car: CarEntity) {
+    this.stoppedCar = car;
   }
 }

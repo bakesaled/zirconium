@@ -1,4 +1,4 @@
-import { CarDirection, CarEntity } from '../entities/car.entitiy';
+import { CarDirection, CarEntity, CarState } from '../entities/car.entitiy';
 import { IntersectionEntity } from '../entities/intersection.entity';
 
 export class GamePlayScene extends Phaser.Scene {
@@ -106,7 +106,7 @@ export class GamePlayScene extends Phaser.Scene {
 
   private spawnCars(start) {
     this.time.addEvent({
-      delay: 1000,
+      delay: 2000,
       loop: true,
       callback: () => {
         const direction: CarDirection =
@@ -117,6 +117,7 @@ export class GamePlayScene extends Phaser.Scene {
           this,
           `car-red-${CarDirection[direction].toLowerCase()}`,
           direction,
+          start,
           start.x,
           start.y
         );
@@ -127,7 +128,7 @@ export class GamePlayScene extends Phaser.Scene {
           this.endGame();
         }
         this.cars.add(car);
-        car.startMoving();
+        car.startInitialMoving();
       }
     });
   }
