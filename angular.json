@@ -148,6 +148,10 @@
             "tsConfig": "apps/web-zirconium-app/tsconfig.spec.json",
             "setupFile": "apps/web-zirconium-app/src/test-setup.ts"
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {}
         }
       }
     },
