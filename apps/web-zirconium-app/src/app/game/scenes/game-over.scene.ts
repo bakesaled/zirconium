@@ -43,5 +43,26 @@ export class GameOverScene extends Phaser.Scene {
       );
       highScoreText.setOrigin(0.5);
     }
+
+    const restartButton = this.add.text(
+      this.physics.world.bounds.centerX,
+      this.physics.world.bounds.centerY + 100,
+      'Restart',
+      {
+        fill: '#0f0'
+      }
+    );
+    restartButton
+      .setOrigin(0.5)
+      .setInteractive({ useHandCursor: true })
+      .on('pointerup', () => {
+        this.scene.setActive(false);
+        this.scene.stop();
+        const scene: GameOverScene = this.game.scene.getScene(
+          'game-play'
+        ) as GameOverScene;
+        scene.scene.setActive(true);
+        this.game.scene.start('game-play');
+      });
   }
 }

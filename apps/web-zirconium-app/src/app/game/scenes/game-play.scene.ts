@@ -46,6 +46,7 @@ export class GamePlayScene extends Phaser.Scene {
   }
   create() {
     this.newHighScore = false;
+    this.score = 0;
     this.cars = this.physics.add.group();
     this.intersections = this.physics.add.staticGroup();
 
@@ -77,10 +78,15 @@ export class GamePlayScene extends Phaser.Scene {
       fill: '#fff'
     });
 
-    this.highScoreText = this.add.text(16, 40, 'high score: 0', {
-      fontSize: '16px',
-      fill: '#fff'
-    });
+    this.highScoreText = this.add.text(
+      16,
+      40,
+      `high score: ${this.highScore}`,
+      {
+        fontSize: '16px',
+        fill: '#fff'
+      }
+    );
   }
   update() {
     const cursorKeys = this.input.keyboard.createCursorKeys();
