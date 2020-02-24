@@ -24,4 +24,4 @@ script:
   - npm run build:ci
 
 after_success:
-  - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" && ng deploy web-zirconium-app --no-build --no-silent --repo=https://$GH_TOKEN@github.com/bakesaled/$NAME.git --base-href=/$NAME/ --name="$GITHUB_NAME" --email="$GITHUB_EMAIL"
+  - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" && ng deploy web-zirconium-app --no-silent --repo=https://$GH_TOKEN@github.com/bakesaled/$NAME.git --base-href=/$NAME/ --name="$GITHUB_NAME" --email="$GITHUB_EMAIL"
