@@ -75,18 +75,32 @@ export class GamePlayScene extends Phaser.Scene {
 
     this.scoreText = this.add.text(16, 16, 'score: 0', {
       fontSize: '16px',
-      fill: '#fff'
+      fill: '#fff',
+      stroke: '#333',
+      strokeThickness: '2'
     });
 
     this.highScoreText = this.add.text(
+      624,
       16,
-      40,
       `high score: ${this.highScore}`,
       {
         fontSize: '16px',
-        fill: '#fff'
+        fill: '#fff',
+        stroke: '#333',
+        strokeThickness: '2',
+        align: 'right',
+        boundsAlignH: 'right',
+        rtl: true
       }
     );
+
+    this.add.text(16, 610, 'HINT: Tap the intersection.', {
+      fontSize: '16px',
+      fill: '#fff',
+      stroke: '#333',
+      strokeThickness: '2'
+    });
   }
   update() {
     const cursorKeys = this.input.keyboard.createCursorKeys();

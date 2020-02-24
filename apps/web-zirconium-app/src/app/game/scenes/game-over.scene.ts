@@ -47,8 +47,10 @@ export class GameOverScene extends Phaser.Scene {
     const restartButton = this.add.text(
       this.physics.world.bounds.centerX,
       this.physics.world.bounds.centerY + 100,
-      'Restart',
+      'RESTART',
       {
+        fontFamily: 'Arial',
+        fontSize: '32px',
         fill: '#0f0'
       }
     );

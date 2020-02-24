@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  background: black;
+  margin: 0;
+  .game-container {
+    display: block;
+    margin: 0 auto;
+    width: 640px;
+    height: 640px;
+    canvas {
+      display: block;
+      width: 640px;
+      height: 640px;
+    }
+  }
+}
