@@ -1,5 +1,6 @@
 import { CarDirection, CarEntity, CarState } from '../entities/car.entitiy';
 import { IntersectionEntity } from '../entities/intersection.entity';
+import { GameOverScene } from './game-over.scene';
 
 export class GamePlayScene extends Phaser.Scene {
   cars: Phaser.Physics.Arcade.Group;
@@ -9,11 +10,15 @@ export class GamePlayScene extends Phaser.Scene {
   tileset;
   score;
   scoreText;
+  highScore;
+  highScoreText;
+  newHighScore;
   constructor() {
     super({
       key: 'game-play'
     });
     this.score = 0;
+    this.highScore = 0;
   }
   preload() {
     this.load.image('tiles', 'assets/tileset.png');
@@ -40,6 +45,7 @@ export class GamePlayScene extends Phaser.Scene {
     });
   }
   create() {
+    this.newHighScore = false;
     this.cars = this.physics.add.group();
     this.intersections = this.physics.add.staticGroup();
 
@@ -70,6 +76,11 @@ export class GamePlayScene extends Phaser.Scene {
       fontSize: '16px',
       fill: '#fff'
     });
+
+    this.highScoreText = this.add.text(16, 40, 'high score: 0', {
+      fontSize: '16px',
+      fill: '#fff'
+    });
   }
   update() {
     const cursorKeys = this.input.keyboard.createCursorKeys();
@@ -95,6 +106,12 @@ export class GamePlayScene extends Phaser.Scene {
   changeScore(delta: number) {
     this.score += delta;
     this.scoreText.setText('score: ' + this.score);
+
+    if (this.score > this.highScore) {
+      this.newHighScore = true;
+      this.highScore = this.score;
+      this.highScoreText.setText('high score: ' + this.highScore);
+    }
   }
 
   private initCars() {
@@ -135,7 +152,11 @@ export class GamePlayScene extends Phaser.Scene {
 
   private endGame() {
     this.scene.pause('game-play');
-    const scene = this.game.scene.getScene('game-over');
+    const scene: GameOverScene = this.game.scene.getScene(
+      'game-over'
+    ) as GameOverScene;
+    scene.newHighScore = this.newHighScore;
+    scene.highScore = this.highScore;
     scene.scene.setActive(true);
     this.game.scene.start('game-over');
   }

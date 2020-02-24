@@ -1,0 +1,27 @@
+#.travis.yml
+
+sudo: required
+dist: trusty
+language: node_js
+node_js:
+  - "11.2.0"
+
+cache:
+  directories:
+    - $HOME/.npm
+    - node_modules
+
+env:
+  global:
+    - NAME="zirconium"
+    - GITHUB_NAME="Brandon Eleuterio"
+    - GITHUB_EMAIL="brandoneleuterio@hotmail.com"
+
+install:
+  - npm i --silent --no-optional
+
+script:
+  - npm run build:ci
+
+after_success:
+  - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" && ng deploy --repo=https://$GH_TOKEN@github.com/bakesaled/$NAME.git --base-href=/$NAME/ --name="$GITHUB_NAME" --email="$GITHUB_EMAIL"
