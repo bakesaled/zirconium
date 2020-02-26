@@ -2,6 +2,7 @@
 body {
   background: black;
   margin: 0;
+  color: #fff;
   .game-container {
     display: block;
     margin: 0 auto;
@@ -11,6 +12,21 @@ body {
       display: block;
       width: 640px;
       height: 640px;
+    }
+  }
+  footer {
+    text-align: center;
+    margin: 5px;
+    a {
+      color: #ccc;
+      text-decoration: none;
+      &:hover {
+        color: #fff;
+        text-decoration: underline;
+      }
+      &:visited {
+        color: #ccc;
+      }
     }
   }
 }
