@@ -66,7 +66,11 @@ export class TrafficLightEntity extends Phaser.Physics.Arcade.Sprite {
     this.phase = TrafficLightPhase.GO;
     this.setFrame(1);
     if (this.collider) {
-      this.collider.destroy();
+      try {
+        this.collider.destroy();
+      } catch (e) {
+        // sometimes this fails; eat it
+      }
     }
 
     this.overlap = this.scene.physics.add.overlap(
@@ -79,21 +83,22 @@ export class TrafficLightEntity extends Phaser.Physics.Arcade.Sprite {
 
     if (this.stoppedCar) {
       this.stoppedCar.startMoving();
-      //   const carsBehind = this.scene.cars
-      //     .getChildren()
-      //     .filter((c: CarEntity) => {
-      //       return c.start === this.stoppedCar.start;
-      //     });
-      //   carsBehind.forEach((car: CarEntity) => {
-      //     this.scene.time.addEvent({
-      //       loop: false,
-      //       delay: 300,
-      //       callback: () => {
-      //         // console.log('move');
-      //         car.startMoving();
-      //       }
-      //     });
-      //   });
+      const carsBehind = this.scene.cars
+        .getChildren()
+        .filter((c: CarEntity) => {
+          return (
+            c !== this.stoppedCar &&
+            c.inBounds() &&
+            c.start === this.stoppedCar.start
+          );
+        });
+      for (let i = 0; i < carsBehind.length; i++) {
+        const car: CarEntity = carsBehind[i] as CarEntity;
+        const delay = 300 * (i + 1);
+        this.scene.time.delayedCall(delay, () => {
+          car.startMoving();
+        });
+      }
     }
   }
 

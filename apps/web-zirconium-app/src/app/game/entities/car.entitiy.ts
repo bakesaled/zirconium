@@ -71,6 +71,15 @@ export class CarEntity extends Phaser.Physics.Arcade.Sprite {
     return overlap !== undefined;
   }
 
+  inBounds() {
+    return (
+      this.body.x < this.body.world.bounds.width &&
+      this.body.x > this.body.world.bounds.x &&
+      this.body.y < this.body.world.bounds.height &&
+      this.body.y > this.body.world.bounds.y
+    );
+  }
+
   private setVelocityByDirection(speed: number, accelerate: boolean) {
     switch (this.direction) {
       case CarDirection.EAST:
