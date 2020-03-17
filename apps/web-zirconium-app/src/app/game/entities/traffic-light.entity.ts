@@ -137,6 +137,8 @@ export class TrafficLightEntity extends Phaser.Physics.Arcade.Sprite {
       if (touching) {
         this.lastCarThrough = car;
         this.scene.changeScore(100);
+        this.scene.carCrossCount++;
+        this.scene.changeLevel();
       }
     }
   }

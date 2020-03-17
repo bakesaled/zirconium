@@ -1,6 +1,7 @@
-import { CarDirection, CarEntity, CarState } from '../entities/car.entitiy';
+import { CarDirection, CarEntity } from '../entities/car.entitiy';
 import { IntersectionEntity } from '../entities/intersection.entity';
 import { GameOverScene } from './game-over.scene';
+import TimerEvent = Phaser.Time.TimerEvent;
 
 export class GamePlayScene extends Phaser.Scene {
   cars: Phaser.Physics.Arcade.Group;
@@ -13,12 +14,20 @@ export class GamePlayScene extends Phaser.Scene {
   highScore;
   highScoreText;
   newHighScore;
+  level;
+  levelText;
+  carSpawnDelay;
+  carCrossCount;
+  carSpawnEvent: TimerEvent;
   constructor() {
     super({
       key: 'game-play'
     });
     this.score = 0;
     this.highScore = 0;
+    this.level = 1;
+    this.carSpawnDelay = 10000;
+    this.carCrossCount = 0;
   }
   preload() {
     this.load.image('tiles', 'assets/tileset.png');
@@ -47,13 +56,16 @@ export class GamePlayScene extends Phaser.Scene {
   create() {
     this.newHighScore = false;
     this.score = 0;
+    this.level = 1;
+    this.carSpawnDelay = 10000;
+    this.carCrossCount = 0;
     this.cars = this.physics.add.group();
     this.intersections = this.physics.add.staticGroup();
 
     const map = this.make.tilemap({ key: 'map' });
     this.tileset = map.addTilesetImage('tileset', 'tiles');
-    const background = map.createStaticLayer('Background', this.tileset, 0, 0);
-    const trees = map.createStaticLayer('Trees', this.tileset, 0, 0);
+    map.createStaticLayer('Background', this.tileset, 0, 0);
+    map.createStaticLayer('Trees', this.tileset, 0, 0);
     this.startsLayer = map.getObjectLayer('Starts')['objects'];
     this.lightsLayer = map.getObjectLayer('Lights')['objects'];
     const intersectionsLayer = map.getObjectLayer('Intersections')['objects'];
@@ -101,6 +113,13 @@ export class GamePlayScene extends Phaser.Scene {
       stroke: '#333',
       strokeThickness: '2'
     });
+
+    this.levelText = this.add.text(16, 40, 'level: 1', {
+      fontSize: '16px',
+      fill: '#fff',
+      stroke: '#333',
+      strokeThickness: '2'
+    });
   }
   update() {
     const cursorKeys = this.input.keyboard.createCursorKeys();
@@ -124,7 +143,7 @@ export class GamePlayScene extends Phaser.Scene {
   }
 
   changeScore(delta: number) {
-    this.score += delta;
+    this.score += delta * this.level;
     this.scoreText.setText('score: ' + this.score);
 
     if (this.score > this.highScore) {
@@ -134,40 +153,61 @@ export class GamePlayScene extends Phaser.Scene {
     }
   }
 
+  changeLevel() {
+    if (this.carSpawnDelay === 0) {
+      return;
+    }
+    if (this.carCrossCount % 10 === 0) {
+      this.level++;
+      this.carSpawnDelay -= 1000;
+      this.carSpawnEvent.remove(false);
+      this.spawnCars();
+      this.levelText.setText('level: ' + this.level);
+    }
+  }
+
   private initCars() {
     this.physics.add.collider(this.cars, this.cars);
     this.startsLayer.forEach(start => {
-      this.spawnCars(start);
+      this.spawnCar(start);
+    });
+    this.spawnCars();
+  }
+
+  private spawnCars() {
+    this.carSpawnEvent = this.time.addEvent({
+      delay: this.carSpawnDelay,
+      loop: true,
+      callbackScope: this,
+      callback: () => {
+        this.startsLayer.forEach(start => {
+          this.spawnCar(start);
+        });
+      }
     });
   }
 
-  private spawnCars(start) {
-    this.time.addEvent({
-      delay: 2000,
-      loop: true,
-      callback: () => {
-        const direction: CarDirection =
-          CarDirection[
-            start.name.split('-')[0].toUpperCase() as keyof typeof CarDirection
-          ];
-        const car = new CarEntity(
-          this,
-          `car-red-${CarDirection[direction].toLowerCase()}`,
-          direction,
-          start,
-          start.x,
-          start.y
-        );
+  private spawnCar(start) {
+    const direction: CarDirection =
+      CarDirection[
+        start.name.split('-')[0].toUpperCase() as keyof typeof CarDirection
+      ];
+    const car = new CarEntity(
+      this,
+      `car-red-${CarDirection[direction].toLowerCase()}`,
+      direction,
+      start,
+      start.x,
+      start.y
+    );
 
-        // const lastCar: CarEntity = this.cars.getLast(true);
+    // const lastCar: CarEntity = this.cars.getLast(true);
 
-        if (car.overlaps(this.cars)) {
-          this.endGame();
-        }
-        this.cars.add(car);
-        car.startInitialMoving();
-      }
-    });
+    if (car.overlaps(this.cars)) {
+      this.endGame();
+    }
+    this.cars.add(car);
+    car.startInitialMoving();
   }
 
   private endGame() {
