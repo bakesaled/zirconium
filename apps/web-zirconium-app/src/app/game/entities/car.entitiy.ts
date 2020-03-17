@@ -10,6 +10,12 @@ export enum CarDirection {
   SOUTH,
   WEST
 }
+export enum CarStart {
+  SOUTH,
+  WEST,
+  NORTH,
+  EAST
+}
 export class CarEntity extends Phaser.Physics.Arcade.Sprite {
   static carSize = 32;
   static collisionBounce = 0;

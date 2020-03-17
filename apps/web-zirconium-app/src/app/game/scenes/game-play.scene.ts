@@ -1,4 +1,4 @@
-import { CarDirection, CarEntity } from '../entities/car.entitiy';
+import { CarDirection, CarEntity, CarStart } from '../entities/car.entitiy';
 import { IntersectionEntity } from '../entities/intersection.entity';
 import { GameOverScene } from './game-over.scene';
 import TimerEvent = Phaser.Time.TimerEvent;
@@ -194,7 +194,7 @@ export class GamePlayScene extends Phaser.Scene {
       ];
     const car = new CarEntity(
       this,
-      `car-red-${CarDirection[direction].toLowerCase()}`,
+      `car-red-${CarStart[direction].toLowerCase()}`,
       direction,
       start,
       start.x,
