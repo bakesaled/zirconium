@@ -18,9 +18,9 @@ export class GameOverScene extends Phaser.Scene implements SceneSound {
   set soundEnabled(newValue: boolean) {
     this.sndEnabled = newValue;
     if (this.sndEnabled) {
-      this.endMusic.resume();
+      this.sound.mute = false;
     } else {
-      this.endMusic.pause();
+      this.sound.mute = true;
     }
     localStorage.setItem('sound-enabled', JSON.stringify(newValue));
   }
