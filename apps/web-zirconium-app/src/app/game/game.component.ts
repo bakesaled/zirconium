@@ -12,6 +12,7 @@ import { GameIntroScene } from './scenes/game-intro-scene';
 export class GameComponent implements OnInit {
   phaserGame: Phaser.Game;
   config: Phaser.Types.Core.GameConfig;
+  soundEnabled: boolean;
 
   constructor() {
     this.config = {
@@ -26,11 +27,23 @@ export class GameComponent implements OnInit {
           // gravity: { y: 100 }
           // debug: true
         }
-      }
+      },
+      audio: {}
     };
+
+    const soundEnabledString = localStorage.getItem('sound-enabled');
+    if (soundEnabledString && soundEnabledString.length) {
+      this.soundEnabled = JSON.parse(soundEnabledString);
+    }
   }
 
   ngOnInit() {
     this.phaserGame = new Phaser.Game(this.config);
+  }
+
+  volumeToggle() {
+    const scene: any = this.phaserGame.scene.getScenes(true);
+    scene[0].soundEnabled = !scene[0].soundEnabled;
+    this.soundEnabled = !this.soundEnabled;
   }
 }

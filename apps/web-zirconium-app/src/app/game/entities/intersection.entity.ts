@@ -49,11 +49,23 @@ export class IntersectionEntity extends Phaser.GameObjects.Zone {
   }
 
   onPointerDown() {
+    if (this.scene.soundEnabled) {
+      this.scene.tapSound.play({
+        volume: 0.3
+      });
+    }
     this.advanceLightCycle();
   }
 
   private advanceLightCycle() {
-    this.lights.getChildren().forEach((light: TrafficLightEntity) => {
+    const lights = this.lights.getChildren();
+    const stopLights = lights.filter(
+      (l: TrafficLightEntity) => l.phase === TrafficLightPhase.STOP
+    );
+    if (stopLights.length === 4) {
+      return;
+    }
+    lights.forEach((light: TrafficLightEntity) => {
       if (light.phase === TrafficLightPhase.STOP) {
         light.startGoPhase();
       } else if (light.phase === TrafficLightPhase.GO) {

@@ -2,8 +2,12 @@ import { CarDirection, CarEntity, CarStart } from '../entities/car.entitiy';
 import { IntersectionEntity } from '../entities/intersection.entity';
 import { GameOverScene } from './game-over.scene';
 import TimerEvent = Phaser.Time.TimerEvent;
+import BaseSound = Phaser.Sound.BaseSound;
+import { SceneSound } from './scene-sound';
 
-export class GamePlayScene extends Phaser.Scene {
+export class GamePlayScene extends Phaser.Scene implements SceneSound {
+  private sndEnabled: boolean;
+
   cars: Phaser.Physics.Arcade.Group;
   intersections: Phaser.Physics.Arcade.StaticGroup;
   startsLayer: Phaser.Types.Tilemaps.TiledObject[];
@@ -19,6 +23,28 @@ export class GamePlayScene extends Phaser.Scene {
   carSpawnDelay;
   carCrossCount;
   carSpawnEvent: TimerEvent;
+  bgMusic: BaseSound;
+  crashSound: BaseSound;
+  levelUpSound: BaseSound;
+  tapSound: BaseSound;
+
+  get soundEnabled(): boolean {
+    const soundEnabledString = localStorage.getItem('sound-enabled');
+    if (soundEnabledString && soundEnabledString.length) {
+      this.sndEnabled = JSON.parse(soundEnabledString);
+    }
+    return this.sndEnabled;
+  }
+  set soundEnabled(newValue: boolean) {
+    this.sndEnabled = newValue;
+    if (this.sndEnabled) {
+      this.bgMusic.resume();
+    } else {
+      this.bgMusic.pause();
+    }
+    localStorage.setItem('sound-enabled', JSON.stringify(newValue));
+  }
+
   constructor() {
     super({
       key: 'game-play'
@@ -52,6 +78,10 @@ export class GamePlayScene extends Phaser.Scene {
       frameWidth: 24,
       frameHeight: 24
     });
+    this.load.audio('bg-music', 'assets/game-play-music.mp3');
+    this.load.audio('crash-sound', 'assets/24_boom_5.wav');
+    this.load.audio('level-up-sound', 'assets/37_score.wav');
+    this.load.audio('tap-sound', 'assets/28_item_1.wav');
   }
   create() {
     this.newHighScore = false;
@@ -61,6 +91,11 @@ export class GamePlayScene extends Phaser.Scene {
     this.carCrossCount = 0;
     this.cars = this.physics.add.group();
     this.intersections = this.physics.add.staticGroup();
+
+    this.bgMusic = this.sound.add('bg-music');
+    this.crashSound = this.sound.add('crash-sound');
+    this.levelUpSound = this.sound.add('level-up-sound');
+    this.tapSound = this.sound.add('tap-sound');
 
     const map = this.make.tilemap({ key: 'map' });
     this.tileset = map.addTilesetImage('tileset', 'tiles');
@@ -120,27 +155,17 @@ export class GamePlayScene extends Phaser.Scene {
       stroke: '#333',
       strokeThickness: '2'
     });
-  }
-  update() {
-    const cursorKeys = this.input.keyboard.createCursorKeys();
 
-    // if (cursorKeys.up.isDown) {
-    //   this.square.body.setVelocityY(-500);
-    // } else if (cursorKeys.down.isDown) {
-    //   this.square.body.setVelocityY(500);
-    // } else {
-    //   this.square.body.setVelocityY(0);
-    // }
-    //
-    // if (cursorKeys.right.isDown) {
-    //   this.square.body.setVelocityX(500);
-    // } else if (cursorKeys.left.isDown) {
-    //   this.square.body.setVelocityX(-500);
-    // } else {
-    //   this.square.body.setVelocityX(0);
-    // }
-    // this.car.body.setVelocityX(100);
+    this.bgMusic.play({
+      volume: 0.3,
+      loop: true
+    });
+
+    if (!this.soundEnabled) {
+      this.bgMusic.pause();
+    }
   }
+  update() {}
 
   changeScore(delta: number) {
     this.score += delta * this.level;
@@ -163,6 +188,28 @@ export class GamePlayScene extends Phaser.Scene {
       this.carSpawnEvent.remove(false);
       this.spawnCars();
       this.levelText.setText('level: ' + this.level);
+      if (this.soundEnabled) {
+        this.levelUpSound.play({
+          volume: 0.2
+        });
+      }
+      const bigLevelUpText = this.add.text(70, 100, `level ${this.level}`, {
+        fontSize: '40px',
+        fill: '#fff',
+        stroke: '#333',
+        strokeThickness: '2'
+      });
+
+      this.add.tween({
+        targets: [bigLevelUpText],
+        ease: 'Linear',
+        duration: 2000,
+        delay: 0,
+        alpha: {
+          from: 1,
+          to: 0
+        }
+      });
     }
   }
 
@@ -211,13 +258,22 @@ export class GamePlayScene extends Phaser.Scene {
   }
 
   private endGame() {
-    this.scene.pause('game-play');
-    const scene: GameOverScene = this.game.scene.getScene(
-      'game-over'
-    ) as GameOverScene;
-    scene.newHighScore = this.newHighScore;
-    scene.highScore = this.highScore;
-    scene.scene.setActive(true);
-    this.game.scene.start('game-over');
+    this.bgMusic.pause();
+    if (this.soundEnabled) {
+      this.crashSound.play({
+        volume: 0.3
+      });
+    }
+    this.time.delayedCall(2000, () => {
+      this.scene.pause('game-play');
+      this.scene.setActive(false);
+      const scene: GameOverScene = this.game.scene.getScene(
+        'game-over'
+      ) as GameOverScene;
+      scene.newHighScore = this.newHighScore;
+      scene.highScore = this.highScore;
+      // scene.scene.setActive(true);
+      this.game.scene.start('game-over');
+    });
   }
 }

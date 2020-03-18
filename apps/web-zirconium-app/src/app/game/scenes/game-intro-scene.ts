@@ -1,12 +1,35 @@
-import { GameOverScene } from './game-over.scene';
+import BaseSound = Phaser.Sound.BaseSound;
+import { SceneSound } from './scene-sound';
 
-export class GameIntroScene extends Phaser.Scene {
-  newHighScore;
-  highScore = 0;
+export class GameIntroScene extends Phaser.Scene implements SceneSound {
+  private sndEnabled: boolean;
+
+  startSound: BaseSound;
+
+  get soundEnabled(): boolean {
+    const soundEnabledString = localStorage.getItem('sound-enabled');
+    if (soundEnabledString && soundEnabledString.length) {
+      this.sndEnabled = JSON.parse(soundEnabledString);
+    }
+    return this.sndEnabled;
+  }
+  set soundEnabled(newValue: boolean) {
+    this.sndEnabled = newValue;
+    localStorage.setItem('sound-enabled', JSON.stringify(newValue));
+  }
+
   constructor() {
     super({
       key: 'game-intro'
     });
+  }
+
+  preload() {
+    const soundEnabledString = localStorage.getItem('sound-enabled');
+    if (soundEnabledString && soundEnabledString.length) {
+      this.soundEnabled = JSON.parse(soundEnabledString);
+    }
+    this.load.audio('start-sound', 'assets/43_select_4.wav');
   }
 
   create() {
@@ -60,8 +83,13 @@ export class GameIntroScene extends Phaser.Scene {
         }
         countText.setVisible(true);
         countText.text = `STARTING IN ${count / 1000}`;
+        if (this.soundEnabled) {
+          this.startSound.play({ volume: 0.2 });
+        }
         count -= 1000;
       }
     });
+
+    this.startSound = this.sound.add('start-sound');
   }
 }

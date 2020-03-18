@@ -1,0 +1,4 @@
+<button class="zir-mute-button" mat-icon-button (click)="volumeToggle()">
+  <mat-icon *ngIf="!soundEnabled">volume_off</mat-icon>
+  <mat-icon *ngIf="soundEnabled">volume_up</mat-icon>
+</button>
