@@ -1,93 +1,38 @@
 {
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
+  "newProjectRoot": "projects",
   "projects": {
-    "node-zirconium-engine": {
-      "root": "apps/node-zirconium-engine",
-      "sourceRoot": "apps/node-zirconium-engine/src",
-      "projectType": "application",
-      "prefix": "node-zirconium-engine",
-      "schematics": {},
-      "architect": {
-        "build": {
-          "builder": "@nrwl/node:build",
-          "options": {
-            "outputPath": "dist/apps/node-zirconium-engine",
-            "main": "apps/node-zirconium-engine/src/main.ts",
-            "tsConfig": "apps/node-zirconium-engine/tsconfig.app.json",
-            "assets": ["apps/node-zirconium-engine/src/assets"]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/node-zirconium-engine/src/environments/environment.ts",
-                  "with": "apps/node-zirconium-engine/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "node-zirconium-engine:build"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "apps/node-zirconium-engine/tsconfig.app.json",
-              "apps/node-zirconium-engine/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!apps/node-zirconium-engine/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/node-zirconium-engine/jest.config.js",
-            "tsConfig": "apps/node-zirconium-engine/tsconfig.spec.json"
-          }
-        }
-      }
-    },
-    "web-zirconium-app": {
+    "zirconium": {
       "projectType": "application",
       "schematics": {
-        "@nrwl/angular:component": {
+        "@schematics/angular:component": {
           "style": "scss"
         }
       },
-      "root": "apps/web-zirconium-app",
-      "sourceRoot": "apps/web-zirconium-app/src",
-      "prefix": "zirconium",
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "zir",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/apps/web-zirconium-app",
-            "index": "apps/web-zirconium-app/src/index.html",
-            "main": "apps/web-zirconium-app/src/main.ts",
-            "polyfills": "apps/web-zirconium-app/src/polyfills.ts",
-            "tsConfig": "apps/web-zirconium-app/tsconfig.app.json",
-            "aot": false,
-            "assets": [
-              "apps/web-zirconium-app/src/favicon.ico",
-              "apps/web-zirconium-app/src/assets"
-            ],
-            "styles": ["apps/web-zirconium-app/src/styles.scss"],
+            "outputPath": "dist",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.app.json",
+            "aot": true,
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": ["node_modules/phaser/dist/phaser.min.js"]
           },
           "configurations": {
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/web-zirconium-app/src/environments/environment.ts",
-                  "with": "apps/web-zirconium-app/src/environments/environment.prod.ts"
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -95,7 +40,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -117,36 +61,34 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "web-zirconium-app:build"
+            "browserTarget": "zirconium:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "web-zirconium-app:build:production"
+              "browserTarget": "zirconium:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "web-zirconium-app:build"
+            "browserTarget": "zirconium:build"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "apps/web-zirconium-app/tsconfig.app.json",
-              "apps/web-zirconium-app/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!apps/web-zirconium-app/**"]
+            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/jest:jest",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "jestConfig": "apps/web-zirconium-app/jest.config.js",
-            "tsConfig": "apps/web-zirconium-app/tsconfig.spec.json",
-            "setupFile": "apps/web-zirconium-app/src/test-setup.ts"
+            "tsConfig": "src/tsconfig.spec.json",
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
+            "scripts": []
           }
         },
         "deploy": {
@@ -154,46 +96,7 @@
           "options": {}
         }
       }
-    },
-    "web-zirconium-app-e2e": {
-      "root": "apps/web-zirconium-app-e2e",
-      "sourceRoot": "apps/web-zirconium-app-e2e/src",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@nrwl/cypress:cypress",
-          "options": {
-            "cypressConfig": "apps/web-zirconium-app-e2e/cypress.json",
-            "tsConfig": "apps/web-zirconium-app-e2e/tsconfig.e2e.json",
-            "devServerTarget": "web-zirconium-app:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "web-zirconium-app:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["apps/web-zirconium-app-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/web-zirconium-app-e2e/**"]
-          }
-        }
-      }
     }
   },
-  "cli": {
-    "defaultCollection": "@nrwl/node"
-  },
-  "defaultProject": "node-zirconium-engine",
-  "schematics": {
-    "@nrwl/angular:application": {
-      "unitTestRunner": "jest",
-      "e2eTestRunner": "cypress"
-    },
-    "@nrwl/angular:library": {
-      "unitTestRunner": "jest"
-    }
-  }
+  "defaultProject": "zirconium"
 }

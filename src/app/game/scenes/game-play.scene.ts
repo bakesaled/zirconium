@@ -101,9 +101,9 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
     this.tileset = map.addTilesetImage('tileset', 'tiles');
     map.createStaticLayer('Background', this.tileset, 0, 0);
     map.createStaticLayer('Trees', this.tileset, 0, 0);
-    this.startsLayer = map.getObjectLayer('Starts')['objects'];
-    this.lightsLayer = map.getObjectLayer('Lights')['objects'];
-    const intersectionsLayer = map.getObjectLayer('Intersections')['objects'];
+    this.startsLayer = map.getObjectLayer('Starts').objects;
+    this.lightsLayer = map.getObjectLayer('Lights').objects;
+    const intersectionsLayer = map.getObjectLayer('Intersections').objects;
     // this.square = this.add.rectangle(400, 400, 100, 100, 0xffffff) as any;
     // this.physics.add.existing(this.square);
     // const light = new TrafficLightEntity(this, 284, 336);

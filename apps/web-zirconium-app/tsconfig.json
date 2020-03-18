@@ -1,9 +1,0 @@
-{
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "types": ["node", "jest"],
-    "lib": ["es2018", "dom", "scripthost"]
-  },
-  "include": ["**/*.ts"]
-}

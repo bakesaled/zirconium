@@ -1,10 +1,13 @@
+const baseConfig = require('./jest.base.config');
+
 module.exports = {
-  testMatch: ['**/+(*.)+(spec|test).+(ts|js)?(x)'],
-  transform: {
-    '^.+\\.(ts|js|html)$': 'ts-jest'
-  },
-  resolver: '@nrwl/jest/plugins/resolver',
-  moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageReporters: ['html'],
-  passWithNoTests: true
+  ...baseConfig,
+  roots: ['<rootDir>/src'],
+  testMatch: ['<rootDir>/src/**/*.spec.[jt]s'],
+  globals: {
+    'ts-jest': {
+      tsConfig: '<rootDir>/src/tsconfig.spec.json'
+    },
+    stringifyContentPathRegex: true
+  }
 };

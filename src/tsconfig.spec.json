@@ -1,9 +1,12 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
+    "outDir": "../out-tsc/spec",
     "module": "commonjs",
     "types": ["jest", "node"]
   },
+  "files": [
+    "polyfills.ts"
+  ],
   "include": ["**/*.spec.ts", "**/*.d.ts"]
 }

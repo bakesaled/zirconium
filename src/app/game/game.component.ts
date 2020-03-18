@@ -5,7 +5,7 @@ import { GameOverScene } from './scenes/game-over.scene';
 import { GameIntroScene } from './scenes/game-intro-scene';
 
 @Component({
-  selector: 'zirconium-game',
+  selector: 'zir-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
