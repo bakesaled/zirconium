@@ -17,11 +17,7 @@ export class GameOverScene extends Phaser.Scene implements SceneSound {
   }
   set soundEnabled(newValue: boolean) {
     this.sndEnabled = newValue;
-    if (this.sndEnabled) {
-      this.sound.mute = false;
-    } else {
-      this.sound.mute = true;
-    }
+    this.sound.mute = !this.sndEnabled;
     localStorage.setItem('sound-enabled', JSON.stringify(newValue));
   }
 
@@ -97,7 +93,7 @@ export class GameOverScene extends Phaser.Scene implements SceneSound {
 
     this.endMusic = this.sound.add('end-music');
     this.endMusic.play({
-      volume: 0.3,
+      volume: 0.4,
       loop: true
     });
 
