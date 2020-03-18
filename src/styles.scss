@@ -3,6 +3,7 @@ body {
   background: black;
   margin: 0;
   color: #fff;
+  font-family: Courier;
   .game-container {
     display: block;
     margin: 0 auto;
@@ -27,6 +28,15 @@ body {
       &:visited {
         color: #ccc;
       }
+    }
+    p {
+      text-align: justify;
+    }
+    h3 {
+      text-transform: uppercase;
+    }
+    hr {
+      width: 200px;
     }
   }
 }

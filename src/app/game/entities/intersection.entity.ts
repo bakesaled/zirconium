@@ -23,7 +23,7 @@ export class IntersectionEntity extends Phaser.GameObjects.Zone {
     this.setOrigin(0.5, 0.5);
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
-    this.setInteractive();
+    this.setInteractive({ useHandCursor: true });
     this.on('pointerdown', this.onPointerDown);
 
     const lightLocations = this.scene.lightsLayer.filter(o =>
