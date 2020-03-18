@@ -162,7 +162,7 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
     });
 
     if (!this.soundEnabled) {
-      this.bgMusic.pause();
+      this.sound.mute = true;
     }
   }
   update() {}

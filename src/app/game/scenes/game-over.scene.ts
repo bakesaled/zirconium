@@ -102,7 +102,7 @@ export class GameOverScene extends Phaser.Scene implements SceneSound {
     });
 
     if (!this.soundEnabled) {
-      this.endMusic.pause();
+      this.sound.mute = true;
     }
   }
 }
