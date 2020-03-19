@@ -14,12 +14,55 @@
         var global = window;
       }
     </script>
-  <link rel="stylesheet" href="styles.2973b3f3c46edd2e5a73.css"></head>
+  <link rel="stylesheet" href="styles.91cbdc31d287d60a65b1.css"></head>
   <body>
     <div id="game-container" class="game-container">
-      <zir-root></zir-root>
+      <zir-root>
+        <style>
+          zir-root {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+
+            color: white;
+            text-transform: uppercase;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+              Oxygen-Sans, Ubuntu, Cantarell, Helvetica, sans-serif;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+          }
+          body {
+            background: black;
+            margin: 0;
+            padding: 0;
+          }
+
+          @keyframes dots {
+            50% {
+              transform: translateY(-0.4rem);
+            }
+            100% {
+              transform: translateY(0);
+            }
+          }
+
+          .d {
+            animation: dots 1.5s ease-out infinite;
+          }
+          .d-2 {
+            animation-delay: 0.5s;
+          }
+          .d-3 {
+            animation-delay: 1s;
+          }
+        </style>
+
+        Loading<span class="d">.</span><span class="d d-2">.</span
+        ><span class="d d-3">.</span>
+      </zir-root>
     </div>
-    <footer>
+    <footer style="background-color: black; color: white;">
       <h3>Zirconium</h3>
       <p>
         Zirconium is a traffic-flow puzzle game. Gain points for each car that
@@ -37,5 +80,5 @@
       <hr />
       <a href="https://eleuterio.org">eleuterio.org</a>
     </footer>
-  <script src="runtime-es2015.0811dcefd377500b5b1a.js" type="module"></script><script src="runtime-es5.0811dcefd377500b5b1a.js" nomodule defer></script><script src="polyfills-es5.c219b7059a7feb126472.js" nomodule defer></script><script src="polyfills-es2015.3fd94ed6a324eee92aec.js" type="module"></script><script src="scripts.45f373575b06caebe3a7.js" defer></script><script src="main-es2015.19fcb05fe41abf3a6621.js" type="module"></script><script src="main-es5.19fcb05fe41abf3a6621.js" nomodule defer></script></body>
+  <script src="runtime-es2015.0811dcefd377500b5b1a.js" type="module"></script><script src="runtime-es5.0811dcefd377500b5b1a.js" nomodule defer></script><script src="polyfills-es5.c219b7059a7feb126472.js" nomodule defer></script><script src="polyfills-es2015.3fd94ed6a324eee92aec.js" type="module"></script><script src="scripts.45f373575b06caebe3a7.js" defer></script><script src="main-es2015.adb530d48ae0cb02860d.js" type="module"></script><script src="main-es5.adb530d48ae0cb02860d.js" nomodule defer></script></body>
 </html>
