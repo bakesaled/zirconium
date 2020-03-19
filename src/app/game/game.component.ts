@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import Phaser from 'phaser';
 import { GamePlayScene } from './scenes/game-play.scene';
 import { GameOverScene } from './scenes/game-over.scene';
-import { GameIntroScene } from './scenes/game-intro-scene';
+import { GameIntroScene } from './scenes/game-intro.scene';
+import { PreloadScene } from './scenes/preload.scene';
 
 @Component({
   selector: 'zir-game',
@@ -19,7 +20,7 @@ export class GameComponent implements OnInit {
       type: Phaser.AUTO,
       height: 640,
       width: 640,
-      scene: [GameIntroScene, GamePlayScene, GameOverScene],
+      scene: [PreloadScene, GameIntroScene, GamePlayScene, GameOverScene],
       parent: 'game-container',
       physics: {
         default: 'arcade',

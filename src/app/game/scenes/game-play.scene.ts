@@ -51,34 +51,7 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
     this.carSpawnDelay = 10000;
     this.carCrossCount = 0;
   }
-  preload() {
-    this.load.image('tiles', 'assets/tileset.png');
-    this.load.tilemapTiledJSON('map', 'assets/level-1.json');
-    this.load.image('car-red-east', 'assets/car-red-east.png');
-    this.load.image('car-red-west', 'assets/car-red-west.png');
-    this.load.image('car-red-north', 'assets/car-red-north.png');
-    this.load.image('car-red-south', 'assets/car-red-south.png');
-    this.load.spritesheet('light-west', 'assets/light-east.png', {
-      frameWidth: 24,
-      frameHeight: 24
-    });
-    this.load.spritesheet('light-east', 'assets/light-west.png', {
-      frameWidth: 24,
-      frameHeight: 24
-    });
-    this.load.spritesheet('light-south', 'assets/light-north.png', {
-      frameWidth: 24,
-      frameHeight: 24
-    });
-    this.load.spritesheet('light-north', 'assets/light-south.png', {
-      frameWidth: 24,
-      frameHeight: 24
-    });
-    this.load.audio('bg-music', 'assets/game-play-music.mp3');
-    this.load.audio('crash-sound', 'assets/24_boom_5.wav');
-    this.load.audio('level-up-sound', 'assets/37_score.wav');
-    this.load.audio('tap-sound', 'assets/28_item_1.wav');
-  }
+  preload() {}
   create() {
     this.newHighScore = false;
     this.score = 0;

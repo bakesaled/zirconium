@@ -27,11 +27,7 @@ export class GameOverScene extends Phaser.Scene implements SceneSound {
     });
   }
 
-  preload() {
-    this.load.audio('end-music', 'assets/end-music.mp3', {
-      instances: 1
-    });
-  }
+  preload() {}
 
   create() {
     this.add.rectangle(

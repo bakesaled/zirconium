@@ -29,7 +29,6 @@ export class GameIntroScene extends Phaser.Scene implements SceneSound {
     if (soundEnabledString && soundEnabledString.length) {
       this.soundEnabled = JSON.parse(soundEnabledString);
     }
-    this.load.audio('start-sound', 'assets/43_select_4.wav');
   }
 
   create() {
