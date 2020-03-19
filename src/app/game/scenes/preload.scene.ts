@@ -57,7 +57,7 @@ export class PreloadScene extends Phaser.Scene {
     const loadingText = this.make.text({
       x: width / 2,
       y: height / 2 - 50,
-      text: 'Loading...',
+      text: 'LOADING...',
       style: {
         font: '20px monospace',
         fill: '#ffffff'
@@ -89,7 +89,7 @@ export class PreloadScene extends Phaser.Scene {
     assetText.setOrigin(0.5, 0.5);
 
     this.load.on('progress', value => {
-      percentText.setText(parseInt(value, 10) * 100 + '%');
+      percentText.setText(value * 100 + '%');
       progressBar.clear();
       progressBar.fillStyle(0xffffff, 1);
       progressBar.fillRect(250, 280, 300 * value, 30);
