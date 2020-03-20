@@ -89,40 +89,48 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
 
     this.initCars();
 
-    this.scoreText = this.add.text(16, 16, 'score: 0', {
-      fontSize: '16px',
+    this.scoreText = this.add.text(16, 16, [`SCORE`, '0'], {
+      fontSize: '26px',
+      fontFamily: 'Arial',
       fill: '#fff',
       stroke: '#333',
-      strokeThickness: '2'
+      strokeThickness: 1,
+      lineSpacing: 1
     });
 
     this.highScoreText = this.add.text(
       624,
       16,
-      `high score: ${this.highScore}`,
+      [`HIGH SCORE`, this.highScore],
       {
-        fontSize: '16px',
+        fontSize: '26px',
+        fontFamily: 'Arial',
         fill: '#fff',
         stroke: '#333',
-        strokeThickness: '2',
+        strokeThickness: 1,
         align: 'right',
         boundsAlignH: 'right',
-        rtl: true
+        rtl: true,
+        lineSpacing: 1
       }
     );
 
-    this.add.text(16, 610, 'HINT: Tap the intersection.', {
-      fontSize: '16px',
+    this.add.text(16, 590, ['HINT:', 'Tap the intersection'], {
+      fontSize: '20px',
+      fontFamily: 'Arial',
       fill: '#fff',
       stroke: '#333',
-      strokeThickness: '2'
+      strokeThickness: 1,
+      lineSpacing: 1
     });
 
-    this.levelText = this.add.text(16, 40, 'level: 1', {
-      fontSize: '16px',
-      fill: '#fff',
+    this.levelText = this.add.text(170, 16, ['LEVEL', '1'], {
+      fontSize: '26px',
+      fontFamily: 'Arial',
+      fill: '#ffdb4d',
       stroke: '#333',
-      strokeThickness: '2'
+      strokeThickness: 1,
+      lineSpacing: 1
     });
 
     this.bgMusic.play({
@@ -138,12 +146,12 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
 
   changeScore(delta: number) {
     this.score += delta * this.level;
-    this.scoreText.setText('score: ' + this.score);
+    this.scoreText.setText(['SCORE', this.score]);
 
     if (this.score > this.highScore) {
       this.newHighScore = true;
       this.highScore = this.score;
-      this.highScoreText.setText('high score: ' + this.highScore);
+      this.highScoreText.setText(['HIGH SCORE', this.highScore]);
     }
   }
 
@@ -156,17 +164,18 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
       this.carSpawnDelay -= 1000;
       this.carSpawnEvent.remove(false);
       this.spawnCars();
-      this.levelText.setText('level: ' + this.level);
+      this.levelText.setText(['LEVEL', this.level]);
       if (this.soundEnabled) {
         this.levelUpSound.play({
           volume: 0.2
         });
       }
-      const bigLevelUpText = this.add.text(70, 100, `level ${this.level}`, {
-        fontSize: '40px',
-        fill: '#fff',
+      const bigLevelUpText = this.add.text(70, 100, 'LEVEL UP', {
+        fontSize: '42px',
+        fontFamily: 'Arial',
+        fill: '#ffdb4d',
         stroke: '#333',
-        strokeThickness: '2'
+        strokeThickness: 2
       });
 
       this.add.tween({

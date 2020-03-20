@@ -54,7 +54,7 @@ export class GameOverScene extends Phaser.Scene implements SceneSound {
     if (this.newHighScore) {
       const highScoreText = this.add.text(
         this.physics.world.bounds.centerX,
-        this.physics.world.bounds.centerY + 40,
+        this.physics.world.bounds.centerY + 45,
         `NEW HIGH SCORE! ${this.highScore}`,
         {
           fontFamily: 'Arial',
@@ -68,7 +68,7 @@ export class GameOverScene extends Phaser.Scene implements SceneSound {
 
     const restartButton = this.add.text(
       this.physics.world.bounds.centerX,
-      this.physics.world.bounds.centerY + 100,
+      this.physics.world.bounds.centerY + 110,
       'RESTART',
       {
         fontFamily: 'Arial',
