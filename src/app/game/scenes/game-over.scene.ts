@@ -1,5 +1,6 @@
 import { SceneSound } from './scene-sound';
 import BaseSound = Phaser.Sound.BaseSound;
+import { ZirConfig } from '../config';
 
 export class GameOverScene extends Phaser.Scene implements SceneSound {
   private sndEnabled: boolean;
@@ -43,7 +44,7 @@ export class GameOverScene extends Phaser.Scene implements SceneSound {
       this.physics.world.bounds.centerY,
       'GAME OVER',
       {
-        fontFamily: 'Arial',
+        fontFamily: ZirConfig.GAME_FONT_FAMILY,
         fontSize: '48px',
         fill: '#fff',
         align: 'center'
@@ -57,7 +58,7 @@ export class GameOverScene extends Phaser.Scene implements SceneSound {
         this.physics.world.bounds.centerY + 45,
         `NEW HIGH SCORE! ${this.highScore}`,
         {
-          fontFamily: 'Arial',
+          fontFamily: ZirConfig.GAME_FONT_FAMILY,
           fontSize: '32px',
           fill: '#fff',
           align: 'center'
@@ -71,7 +72,7 @@ export class GameOverScene extends Phaser.Scene implements SceneSound {
       this.physics.world.bounds.centerY + 110,
       'RESTART',
       {
-        fontFamily: 'Arial',
+        fontFamily: ZirConfig.GAME_FONT_FAMILY,
         fontSize: '32px',
         fill: '#0f0'
       }

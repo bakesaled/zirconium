@@ -1,7 +1,13 @@
 @import '~@angular/material/theming';
 @import 'themes/palette';
 
-@include mat-core();
+$custom-typography: mat-typography-config(
+  $font-family: 'Teko, sans-serif'
+);
+
+@include angular-material-typography($custom-typography);
+
+@include mat-core($custom-typography);
 
 $zir-primary: mat-palette($zir-black-palette);
 $zir-accent: mat-palette($zir-white-palette);
@@ -19,7 +25,8 @@ body {
 
 body {
   margin: 0;
-  font-family: Courier, sans-serif;
+  font-family: Teko, sans-serif;
+  letter-spacing: 0.0125em;
   .game-container {
     display: flex;
     margin: 0 auto;
@@ -30,24 +37,12 @@ body {
       height: calc(100% - 64px);
     }
   }
-  footer {
-    text-align: center;
-    margin: 5px;
-    p {
-      text-align: justify;
-    }
-    h3 {
-      text-transform: uppercase;
-    }
-    hr {
-      width: 200px;
-    }
-  }
 }
 a {
   color: #ccc;
   &:hover {
     color: #fff;
+    text-decoration: none;
     border-bottom: 1px solid #fff;
   }
   &:visited {

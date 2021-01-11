@@ -1,5 +1,6 @@
 import BaseSound = Phaser.Sound.BaseSound;
 import { SceneSound } from './scene-sound';
+import { ZirConfig } from '../config';
 
 export class GameIntroScene extends Phaser.Scene implements SceneSound {
   private sndEnabled: boolean;
@@ -45,7 +46,7 @@ export class GameIntroScene extends Phaser.Scene implements SceneSound {
       this.physics.world.bounds.centerY,
       'ZIRCONIUM',
       {
-        fontFamily: 'Arial',
+        fontFamily: ZirConfig.GAME_FONT_FAMILY,
         fontSize: '64px',
         fill: '#fff',
         align: 'center'
@@ -60,7 +61,7 @@ export class GameIntroScene extends Phaser.Scene implements SceneSound {
         this.physics.world.bounds.centerY + 50,
         `STARTING IN ${count / 1000}`,
         {
-          fontFamily: 'Arial',
+          fontFamily: ZirConfig.GAME_FONT_FAMILY,
           fontSize: '32px',
           fill: '#fff',
           align: 'center'

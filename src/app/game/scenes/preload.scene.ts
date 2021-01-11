@@ -1,3 +1,5 @@
+import { ZirConfig } from '../config';
+
 export class PreloadScene extends Phaser.Scene {
   constructor() {
     super({
@@ -59,7 +61,8 @@ export class PreloadScene extends Phaser.Scene {
       y: height / 2 - 50,
       text: 'LOADING...',
       style: {
-        font: '20px monospace',
+        fontFamily: ZirConfig.GAME_FONT_FAMILY,
+        fontSize: '20px',
         fill: '#ffffff'
       }
     });
@@ -70,7 +73,8 @@ export class PreloadScene extends Phaser.Scene {
       y: height / 2 - 5,
       text: '0%',
       style: {
-        font: '18px monospace',
+        fontFamily: ZirConfig.GAME_FONT_FAMILY,
+        fontSize: '20px',
         fill: '#ffffff'
       }
     });
@@ -81,7 +85,8 @@ export class PreloadScene extends Phaser.Scene {
       y: height / 2 + 50,
       text: '',
       style: {
-        font: '18px monospace',
+        fontFamily: ZirConfig.GAME_FONT_FAMILY,
+        fontSize: '20px',
         fill: '#ffffff'
       }
     });

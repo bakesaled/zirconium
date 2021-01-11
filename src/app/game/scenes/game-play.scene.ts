@@ -5,6 +5,7 @@ import TimerEvent = Phaser.Time.TimerEvent;
 import BaseSound = Phaser.Sound.BaseSound;
 import { SceneSound } from './scene-sound';
 import { GameLifeLostScene } from './game-life-lost.scene';
+import { ZirConfig } from '../config';
 
 const INITIAL_LEVEL = 1;
 const INITIAL_LIVES = 2;
@@ -110,8 +111,8 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
     this.initCars();
 
     this.scoreText = this.add.text(16, 16, [`SCORE`, '0'], {
-      fontSize: '26px',
-      fontFamily: 'Arial',
+      fontSize: ZirConfig.GAME_FONT_SIZE,
+      fontFamily: ZirConfig.GAME_FONT_FAMILY,
       fill: '#fff',
       stroke: '#333',
       strokeThickness: 1,
@@ -123,8 +124,8 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
       16,
       [`HIGH SCORE`, this.highScore.toString()],
       {
-        fontSize: '26px',
-        fontFamily: 'Arial',
+        fontSize: ZirConfig.GAME_FONT_SIZE,
+        fontFamily: ZirConfig.GAME_FONT_FAMILY,
         fill: '#fff',
         stroke: '#333',
         strokeThickness: 1,
@@ -135,28 +136,28 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
       }
     );
 
-    this.add.text(16, 590, ['HINT:', 'Tap the intersection'], {
-      fontSize: '20px',
-      fontFamily: 'Arial',
+    this.add.text(16, 570, ['HINT:', 'Tap the intersection'], {
+      fontSize: ZirConfig.GAME_FONT_SIZE,
+      fontFamily: ZirConfig.GAME_FONT_FAMILY,
       fill: '#fff',
       stroke: '#333',
       strokeThickness: 1,
       lineSpacing: 1
     });
 
-    this.levelText = this.add.text(170, 16, ['LEVEL', this.level.toString()], {
-      fontSize: '26px',
-      fontFamily: 'Arial',
+    this.levelText = this.add.text(16, 84, ['LEVEL', this.level.toString()], {
+      fontSize: ZirConfig.GAME_FONT_SIZE,
+      fontFamily: ZirConfig.GAME_FONT_FAMILY,
       fill: '#ffdb4d',
       stroke: '#333',
       strokeThickness: 1,
       lineSpacing: 1
     });
 
-    this.livesText = this.add.text(170, 84, ['LIVES', this.lives.toString()], {
-      fontSize: '26px',
-      fontFamily: 'Arial',
-      fill: '#ffdb4d',
+    this.livesText = this.add.text(130, 16, ['LIVES', this.lives.toString()], {
+      fontSize: ZirConfig.GAME_FONT_SIZE,
+      fontFamily: ZirConfig.GAME_FONT_FAMILY,
+      fill: '#fff',
       stroke: '#333',
       strokeThickness: 1,
       lineSpacing: 1
@@ -214,9 +215,9 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
           volume: 0.2
         });
       }
-      const bigLevelUpText = this.add.text(70, 100, 'LEVEL UP', {
+      const bigLevelUpText = this.add.text(70, 84, 'LEVEL UP', {
         fontSize: '42px',
-        fontFamily: 'Arial',
+        fontFamily: ZirConfig.GAME_FONT_FAMILY,
         fill: '#ffdb4d',
         stroke: '#333',
         strokeThickness: 2

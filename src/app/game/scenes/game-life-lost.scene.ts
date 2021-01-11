@@ -2,6 +2,7 @@ import { SceneSound } from './scene-sound';
 import BaseSound = Phaser.Sound.BaseSound;
 import { GamePlayScene } from './game-play.scene';
 import { GameOverScene } from './game-over.scene';
+import { ZirConfig } from '../config';
 
 export class GameLifeLostScene extends Phaser.Scene implements SceneSound {
   private sndEnabled: boolean;
@@ -44,9 +45,9 @@ export class GameLifeLostScene extends Phaser.Scene implements SceneSound {
     const text = this.add.text(
       this.physics.world.bounds.centerX,
       this.physics.world.bounds.centerY,
-      `${this.lives} LIVES REMAINING`,
+      this.lives === 1 ? `1 LIVE REMAINING` : `${this.lives} LIVES REMAINING`,
       {
-        fontFamily: 'Arial',
+        fontFamily: ZirConfig.GAME_FONT_FAMILY,
         fontSize: '48px',
         fill: '#fff',
         align: 'center'
@@ -59,7 +60,7 @@ export class GameLifeLostScene extends Phaser.Scene implements SceneSound {
       this.physics.world.bounds.centerY + 110,
       'CONTINUE',
       {
-        fontFamily: 'Arial',
+        fontFamily: ZirConfig.GAME_FONT_FAMILY,
         fontSize: '32px',
         fill: '#0f0'
       }
@@ -84,7 +85,7 @@ export class GameLifeLostScene extends Phaser.Scene implements SceneSound {
       this.physics.world.bounds.centerY + 210,
       'QUIT',
       {
-        fontFamily: 'Arial',
+        fontFamily: ZirConfig.GAME_FONT_FAMILY,
         fontSize: '32px',
         fill: '#0f0'
       }
