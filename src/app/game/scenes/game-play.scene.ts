@@ -4,6 +4,10 @@ import { GameOverScene } from './game-over.scene';
 import TimerEvent = Phaser.Time.TimerEvent;
 import BaseSound = Phaser.Sound.BaseSound;
 import { SceneSound } from './scene-sound';
+import { GameLifeLostScene } from './game-life-lost.scene';
+
+const INITIAL_LEVEL = 1;
+const INITIAL_LIVES = 3;
 
 export class GamePlayScene extends Phaser.Scene implements SceneSound {
   private sndEnabled: boolean;
@@ -20,6 +24,8 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
   newHighScore;
   level;
   levelText;
+  lives;
+  livesText;
   carSpawnDelay;
   carCrossCount;
   carSpawnEvent: TimerEvent;
@@ -47,16 +53,18 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
     });
     this.score = 0;
     this.highScore = 0;
-    this.level = 1;
-    this.carSpawnDelay = 10000;
+    this.level = INITIAL_LEVEL;
+    this.lives = INITIAL_LIVES;
+    this.carSpawnDelay = 10000 - INITIAL_LEVEL * 1000;
     this.carCrossCount = 0;
   }
   preload() {}
   create() {
     this.newHighScore = false;
     this.score = 0;
-    this.level = 1;
-    this.carSpawnDelay = 10000;
+    this.level = INITIAL_LEVEL;
+    this.lives = INITIAL_LIVES;
+    this.carSpawnDelay = 10000 - INITIAL_LEVEL * 1000;
     this.carCrossCount = 0;
     this.cars = this.physics.add.group();
     this.intersections = this.physics.add.staticGroup();
@@ -124,7 +132,16 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
       lineSpacing: 1
     });
 
-    this.levelText = this.add.text(170, 16, ['LEVEL', '1'], {
+    this.levelText = this.add.text(170, 16, ['LEVEL', this.level.toString()], {
+      fontSize: '26px',
+      fontFamily: 'Arial',
+      fill: '#ffdb4d',
+      stroke: '#333',
+      strokeThickness: 1,
+      lineSpacing: 1
+    });
+
+    this.livesText = this.add.text(170, 84, ['LIVES', this.lives.toString()], {
       fontSize: '26px',
       fontFamily: 'Arial',
       fill: '#ffdb4d',
@@ -144,6 +161,17 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
   }
   update() {}
 
+  reset() {
+    this.cars.clear(true, false);
+
+    if (this.soundEnabled) {
+      this.bgMusic.play({
+        volume: 0.4,
+        loop: true
+      });
+    }
+  }
+
   changeScore(delta: number) {
     this.score += delta * this.level;
     this.scoreText.setText(['SCORE', this.score]);
@@ -161,7 +189,11 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
     }
     if (this.carCrossCount % 10 === 0) {
       this.level++;
-      this.carSpawnDelay -= 1000;
+      if (this.carSpawnDelay <= 1000) {
+        this.carSpawnDelay -= 100;
+      } else if (this.carSpawnDelay > 0) {
+        this.carSpawnDelay -= 1000;
+      }
       this.carSpawnEvent.remove(false);
       this.spawnCars();
       this.levelText.setText(['LEVEL', this.level]);
@@ -229,29 +261,49 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
     // const lastCar: CarEntity = this.cars.getLast(true);
 
     if (car.overlaps(this.cars)) {
-      this.endGame();
+      car.destroy(true);
+      this.reduceLife();
+      return;
     }
     this.cars.add(car);
     car.startInitialMoving();
   }
 
-  private endGame() {
+  private reduceLife() {
     this.bgMusic.pause();
     if (this.soundEnabled) {
       this.crashSound.play({
         volume: 0.3
       });
     }
-    this.time.delayedCall(2000, () => {
+    if (this.lives === 0) {
+      this.endGame();
+    } else {
+      this.lives--;
+      this.livesText.setText(['LIVES', this.lives]);
+
       this.scene.pause('game-play');
       this.scene.setActive(false);
-      const scene: GameOverScene = this.game.scene.getScene(
-        'game-over'
-      ) as GameOverScene;
+      const scene: GameLifeLostScene = this.game.scene.getScene(
+        'game-life-lost'
+      ) as GameLifeLostScene;
+      scene.lives = this.lives;
       scene.newHighScore = this.newHighScore;
       scene.highScore = this.highScore;
-      // scene.scene.setActive(true);
-      this.game.scene.start('game-over');
-    });
+      scene.scene.setActive(true);
+      this.game.scene.start('game-life-lost');
+    }
+  }
+
+  private endGame() {
+    this.scene.pause('game-play');
+    this.scene.setActive(false);
+    const scene: GameOverScene = this.game.scene.getScene(
+      'game-over'
+    ) as GameOverScene;
+    scene.newHighScore = this.newHighScore;
+    scene.highScore = this.highScore;
+    // scene.scene.setActive(true);
+    this.game.scene.start('game-over');
   }
 }

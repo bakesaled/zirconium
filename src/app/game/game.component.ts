@@ -5,6 +5,7 @@ import { GameOverScene } from './scenes/game-over.scene';
 import { GameIntroScene } from './scenes/game-intro.scene';
 import { PreloadScene } from './scenes/preload.scene';
 import { WINDOW } from '../window.service';
+import { GameLifeLostScene } from './scenes/game-life-lost.scene';
 
 @Component({
   selector: 'zir-game',
@@ -29,7 +30,13 @@ export class GameComponent implements OnInit {
       },
       autoFocus: true,
       backgroundColor: 0x000000,
-      scene: [PreloadScene, GameIntroScene, GamePlayScene, GameOverScene],
+      scene: [
+        PreloadScene,
+        GameIntroScene,
+        GamePlayScene,
+        GameLifeLostScene,
+        GameOverScene
+      ],
       parent: 'game-container',
       physics: {
         default: 'arcade',
@@ -65,6 +72,7 @@ export class GameComponent implements OnInit {
     const canvas = document.querySelector('canvas');
     const muteEl = document.querySelector('.zir-mute-button') as HTMLElement;
     canvas.style.height = div.offsetHeight - 64 + 'px';
+    // noinspection JSSuspiciousNameCombination
     canvas.style.width = canvas.style.height;
 
     setTimeout(() => {
