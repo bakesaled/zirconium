@@ -7,7 +7,7 @@ import { SceneSound } from './scene-sound';
 import { GameLifeLostScene } from './game-life-lost.scene';
 
 const INITIAL_LEVEL = 1;
-const INITIAL_LIVES = 3;
+const INITIAL_LIVES = 2;
 
 export class GamePlayScene extends Phaser.Scene implements SceneSound {
   private sndEnabled: boolean;
@@ -19,7 +19,7 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
   tileset;
   score;
   scoreText;
-  highScore;
+  highScr = 0;
   highScoreText;
   newHighScore;
   level;
@@ -47,12 +47,24 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
     localStorage.setItem('sound-enabled', JSON.stringify(newValue));
   }
 
+  get highScore(): number {
+    const soundEnabledString = localStorage.getItem('high-score');
+    if (soundEnabledString && soundEnabledString.length) {
+      this.highScr = JSON.parse(soundEnabledString);
+    }
+    return this.highScr;
+  }
+  set highScore(newValue: number) {
+    this.highScr = newValue;
+    localStorage.setItem('high-score', JSON.stringify(newValue));
+  }
+
   constructor() {
     super({
       key: 'game-play'
     });
     this.score = 0;
-    this.highScore = 0;
+    // this.highScore = 0;
     this.level = INITIAL_LEVEL;
     this.lives = INITIAL_LIVES;
     this.carSpawnDelay = 10000 - INITIAL_LEVEL * 1000;
@@ -109,7 +121,7 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
     this.highScoreText = this.add.text(
       624,
       16,
-      [`HIGH SCORE`, this.highScore],
+      [`HIGH SCORE`, this.highScore.toString()],
       {
         fontSize: '26px',
         fontFamily: 'Arial',
