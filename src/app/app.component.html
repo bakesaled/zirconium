@@ -1,1 +1,37 @@
-<zir-game></zir-game>
+<div class="zir-navigation-container">
+  <mat-toolbar>
+    <button mat-icon-button (click)="drawer.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="zir-app-name">Zirconium</span>
+  </mat-toolbar>
+  <mat-sidenav-container class="zir-sidenav-container">
+    <mat-sidenav
+      #drawer
+      mode="over"
+      class="zir-sidenav"
+      (openedChange)="onDrawerOpenedChange($event)"
+    >
+      <h3>Description</h3>
+      <p>
+        Zirconium is a traffic-flow puzzle game. Gain points for each car that
+        passes through the intersection.
+        <strong><i>Tap or click the intersection</i></strong> to change the
+        traffic lights and keep traffic flowing. Traffic density increases as
+        the gameplay levels advance. Don&#39;t let traffic back up too far,
+        otherwise, the game ends.
+      </p>
+      <h3>Object of the Game</h3>
+      <p>To allow as many cars through the intersection as possible.</p>
+      <hr />
+      <a href="https://eleuterio.org">eleuterio.org</a>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <main>
+        <div id="game-container" class="game-container">
+          <zir-game></zir-game>
+        </div>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

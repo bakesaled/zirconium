@@ -23,10 +23,10 @@ export class GameComponent implements OnInit {
       type: Phaser.AUTO,
       height: 640,
       width: 640,
-      // scale: {
-      //   mode: Phaser.Scale.FIT,
-      //   autoCenter: Phaser.Scale.CENTER_BOTH
-      // },
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.NO_CENTER
+      },
       autoFocus: true,
       backgroundColor: 0x000000,
       scene: [PreloadScene, GameIntroScene, GamePlayScene, GameOverScene],
@@ -59,8 +59,18 @@ export class GameComponent implements OnInit {
   }
 
   private moveButton() {
-    const div = document.getElementById('game-container');
+    const div = document.querySelector(
+      '.zir-navigation-container'
+    ) as HTMLElement;
+    const canvas = document.querySelector('canvas');
     const muteEl = document.querySelector('.zir-mute-button') as HTMLElement;
-    muteEl.style.top = div.offsetHeight + 'px';
+    canvas.style.height = div.offsetHeight - 64 + 'px';
+    canvas.style.width = canvas.style.height;
+
+    setTimeout(() => {
+      const newCanvas = document.querySelector('canvas');
+      muteEl.style.top = newCanvas.offsetHeight - 64 + 'px';
+      muteEl.style.left = newCanvas.offsetWidth - 64 + 'px';
+    });
   }
 }
