@@ -312,7 +312,7 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
     }
     this.lives--;
     this.updateLivesText();
-    if (this.lives === 1) {
+    if (this.lives === 0) {
       this.endGame();
     } else {
       this.scene.pause('game-play');
