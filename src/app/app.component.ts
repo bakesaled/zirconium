@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { GameComponent } from './game/game.component';
+import { version } from 'package.json';
 
 @Component({
   selector: 'zir-root',
@@ -9,6 +10,10 @@ import { GameComponent } from './game/game.component';
 export class AppComponent {
   @ViewChild(GameComponent, { static: true }) gameComponent: GameComponent;
   pausedScene;
+
+  get version() {
+    return version;
+  }
 
   onDrawerOpenedChange($event: boolean) {
     if (!this.gameComponent) {
