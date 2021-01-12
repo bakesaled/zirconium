@@ -76,6 +76,7 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
   }
   preload() {}
   create() {
+    this.collisionOccurred = false;
     this.newHighScore = false;
     this.score = 0;
     this.level = INITIAL_LEVEL;
