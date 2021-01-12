@@ -58,7 +58,7 @@ export class PreloadScene extends Phaser.Scene {
     const height = this.cameras.main.height;
     const loadingText = this.make.text({
       x: width / 2,
-      y: height / 2 - 50,
+      y: height / 2 - 25,
       text: 'LOADING...',
       style: {
         fontFamily: ZirConfig.GAME_FONT_FAMILY,
@@ -70,7 +70,7 @@ export class PreloadScene extends Phaser.Scene {
 
     const percentText = this.make.text({
       x: width / 2,
-      y: height / 2 - 5,
+      y: height / 2 + 15,
       text: '0%',
       style: {
         fontFamily: ZirConfig.GAME_FONT_FAMILY,
