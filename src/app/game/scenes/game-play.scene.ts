@@ -229,11 +229,7 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
     }
     if (this.carCrossCount % 10 === 0) {
       this.level++;
-      if (this.carSpawnDelay <= 1000) {
-        this.carSpawnDelay -= 100;
-      } else if (this.carSpawnDelay > 0) {
-        this.carSpawnDelay -= 1000;
-      }
+      this.calculateDifficulty();
       this.carSpawnEvent.remove(false);
       this.spawnCars();
       this.levelText.setText(['LEVEL', this.level]);
@@ -310,6 +306,16 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
     }
     this.cars.add(car);
     car.startInitialMoving();
+  }
+
+  private calculateDifficulty(): void {
+    if (this.carSpawnDelay <= 2000) {
+      this.carSpawnDelay -= 200;
+    } else if (this.carSpawnDelay <= 1000) {
+      this.carSpawnDelay -= 100;
+    } else if (this.carSpawnDelay > 0) {
+      this.carSpawnDelay -= 1000;
+    }
   }
 
   private reduceLife() {
