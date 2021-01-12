@@ -3,7 +3,8 @@ import {
   ClassProvider,
   FactoryProvider,
   InjectionToken,
-  PLATFORM_ID
+  PLATFORM_ID,
+  Injectable
 } from '@angular/core';
 
 /* Create a new injection token for injecting the window into a component. */
@@ -17,6 +18,7 @@ export abstract class WindowRef {
 }
 
 /* Define class that implements the abstract class and returns the native window object. */
+@Injectable()
 export class BrowserWindowRef extends WindowRef {
   constructor() {
     super();
@@ -35,7 +37,7 @@ export function windowFactory(
   if (isPlatformBrowser(platformId)) {
     return browserWindowRef.nativeWindow;
   }
-  return new Object();
+  return {};
 }
 
 /* Create a injectable provider for the WindowRef token that uses the BrowserWindowRef class. */

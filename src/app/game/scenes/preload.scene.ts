@@ -63,7 +63,7 @@ export class PreloadScene extends Phaser.Scene {
       style: {
         fontFamily: ZirConfig.GAME_FONT_FAMILY,
         fontSize: '20px',
-        fill: '#ffffff'
+        color: '#ffffff'
       }
     });
     loadingText.setOrigin(0.5, 0.5);
@@ -75,7 +75,7 @@ export class PreloadScene extends Phaser.Scene {
       style: {
         fontFamily: ZirConfig.GAME_FONT_FAMILY,
         fontSize: '20px',
-        fill: '#ffffff'
+        color: '#ffffff'
       }
     });
     percentText.setOrigin(0.5, 0.5);
@@ -87,7 +87,7 @@ export class PreloadScene extends Phaser.Scene {
       style: {
         fontFamily: ZirConfig.GAME_FONT_FAMILY,
         fontSize: '20px',
-        fill: '#ffffff'
+        color: '#ffffff'
       }
     });
 
