@@ -6,12 +6,14 @@ import BaseSound = Phaser.Sound.BaseSound;
 import { SceneSound } from './scene-sound';
 import { GameLifeLostScene } from './game-life-lost.scene';
 import { ZirConfig } from '../config';
+import Sprite = Phaser.GameObjects.Sprite;
 
 const INITIAL_LEVEL = 1;
-const INITIAL_LIVES = 2;
+const INITIAL_LIVES = 3;
 
 export class GamePlayScene extends Phaser.Scene implements SceneSound {
   private sndEnabled: boolean;
+  private collisionOccurred = false;
 
   cars: Phaser.Physics.Arcade.Group;
   intersections: Phaser.Physics.Arcade.StaticGroup;
@@ -27,6 +29,7 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
   levelText;
   lives;
   livesText;
+  livesCars: Sprite[];
   carSpawnDelay;
   carCrossCount;
   carSpawnEvent: TimerEvent;
@@ -154,7 +157,7 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
       lineSpacing: 1
     });
 
-    this.livesText = this.add.text(130, 16, ['LIVES', this.lives.toString()], {
+    this.livesText = this.add.text(130, 16, ['CARS'], {
       fontSize: ZirConfig.GAME_FONT_SIZE,
       fontFamily: ZirConfig.GAME_FONT_FAMILY,
       fill: '#fff',
@@ -162,6 +165,8 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
       strokeThickness: 1,
       lineSpacing: 1
     });
+
+    this.updateLivesText();
 
     this.bgMusic.play({
       volume: 0.4,
@@ -174,8 +179,21 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
   }
   update() {}
 
+  updateLivesText() {
+    if (this.livesCars) {
+      this.livesCars.forEach(car => {
+        car.destroy(true);
+      });
+    }
+    this.livesCars = [];
+    for (let i = 0; i < this.lives; i++) {
+      this.livesCars.push(this.add.sprite(145 + i * 32, 56, 'car-red-east'));
+    }
+  }
+
   reset() {
     this.cars.clear(true, false);
+    this.collisionOccurred = false;
 
     if (this.soundEnabled) {
       this.bgMusic.play({
@@ -275,7 +293,10 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
 
     if (car.overlaps(this.cars)) {
       car.destroy(true);
-      this.reduceLife();
+      if (!this.collisionOccurred) {
+        this.collisionOccurred = true;
+        this.reduceLife();
+      }
       return;
     }
     this.cars.add(car);
@@ -289,12 +310,11 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
         volume: 0.3
       });
     }
-    if (this.lives === 0) {
+    this.lives--;
+    this.updateLivesText();
+    if (this.lives === 1) {
       this.endGame();
     } else {
-      this.lives--;
-      this.livesText.setText(['LIVES', this.lives]);
-
       this.scene.pause('game-play');
       this.scene.setActive(false);
       const scene: GameLifeLostScene = this.game.scene.getScene(

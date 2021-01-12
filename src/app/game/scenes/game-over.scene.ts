@@ -39,7 +39,20 @@ export class GameOverScene extends Phaser.Scene implements SceneSound {
       0,
       0.5
     );
-    const text = this.add.text(
+    const carsLeftText = this.add.text(
+      this.physics.world.bounds.centerX,
+      this.physics.world.bounds.centerY - 45,
+      'ALL CARS DESTROYED!',
+      {
+        fontFamily: ZirConfig.GAME_FONT_FAMILY,
+        fontSize: '48px',
+        fill: '#fff',
+        align: 'center'
+      }
+    );
+    carsLeftText.setOrigin(0.5);
+
+    const gameOverText = this.add.text(
       this.physics.world.bounds.centerX,
       this.physics.world.bounds.centerY,
       'GAME OVER',
@@ -50,7 +63,7 @@ export class GameOverScene extends Phaser.Scene implements SceneSound {
         align: 'center'
       }
     );
-    text.setOrigin(0.5);
+    gameOverText.setOrigin(0.5);
 
     if (this.newHighScore) {
       const highScoreText = this.add.text(

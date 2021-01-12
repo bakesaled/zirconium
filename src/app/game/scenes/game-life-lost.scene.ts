@@ -11,6 +11,7 @@ export class GameLifeLostScene extends Phaser.Scene implements SceneSound {
   newHighScore;
   highScore = 0;
   endMusic: BaseSound;
+  crashSound: BaseSound;
 
   get soundEnabled(): boolean {
     const soundEnabledString = localStorage.getItem('sound-enabled');
@@ -34,6 +35,7 @@ export class GameLifeLostScene extends Phaser.Scene implements SceneSound {
   preload() {}
 
   create() {
+    this.crashSound = this.sound.add('crash-sound');
     this.add.rectangle(
       0,
       0,
@@ -45,7 +47,7 @@ export class GameLifeLostScene extends Phaser.Scene implements SceneSound {
     const text = this.add.text(
       this.physics.world.bounds.centerX,
       this.physics.world.bounds.centerY,
-      this.lives === 1 ? `1 LIVE REMAINING` : `${this.lives} LIVES REMAINING`,
+      this.lives === 1 ? `1 CAR REMAINING` : `${this.lives} CARS REMAINING`,
       {
         fontFamily: ZirConfig.GAME_FONT_FAMILY,
         fontSize: '48px',
@@ -94,6 +96,8 @@ export class GameLifeLostScene extends Phaser.Scene implements SceneSound {
       .setOrigin(0.5)
       .setInteractive({ useHandCursor: true })
       .on('pointerup', () => {
+        this.endMusic.stop();
+        this.sound.stopAll();
         this.scene.stop('game-life-lost');
         this.scene.setActive(false);
         const scene: GameOverScene = this.game.scene.getScene(
@@ -103,6 +107,11 @@ export class GameLifeLostScene extends Phaser.Scene implements SceneSound {
         scene.highScore = this.highScore;
         // scene.scene.setActive(true);
         this.game.scene.start('game-over');
+        if (this.soundEnabled) {
+          this.crashSound.play({
+            volume: 0.3
+          });
+        }
       });
 
     this.endMusic = this.sound.add('end-music');
