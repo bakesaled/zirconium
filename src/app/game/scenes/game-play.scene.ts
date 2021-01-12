@@ -37,6 +37,7 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
   crashSound: BaseSound;
   levelUpSound: BaseSound;
   tapSound: BaseSound;
+  scoreSound: BaseSound;
 
   get soundEnabled(): boolean {
     const soundEnabledString = localStorage.getItem('sound-enabled');
@@ -89,6 +90,7 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
     this.bgMusic = this.sound.add('bg-music');
     this.crashSound = this.sound.add('crash-sound');
     this.levelUpSound = this.sound.add('level-up-sound');
+    this.scoreSound = this.sound.add('start-sound');
     this.tapSound = this.sound.add('tap-sound');
 
     const map = this.make.tilemap({ key: 'map' });
@@ -207,6 +209,12 @@ export class GamePlayScene extends Phaser.Scene implements SceneSound {
   changeScore(delta: number) {
     this.score += delta * this.level;
     this.scoreText.setText(['SCORE', this.score]);
+    if (this.soundEnabled) {
+      this.scoreSound.play({
+        volume: 0.1,
+        detune: 1000
+      });
+    }
 
     if (this.score > this.highScore) {
       this.newHighScore = true;
